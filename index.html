@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<htmL>
+  <head>
+    <script src="http://www.google.com/jsapi" type="text/javascript"></script>
+
+    <script type="text/javascript">google.load("jquery", "1.3.2");</script>
+    <script type = "text/javascript" src="states.js"></script>
+  </head>
+  <body>
+    <script>
+
+      $('document').ready( function(){
+
+        function displayStates(states){
+          var ul = $('ul'), results;
+          if(ul.length == 0){
+            $('#input').after('<ul></ul>');
+          } else {
+            ul.children().remove()
+          }
+          results = $("ul")
+          states.forEach( function(state){
+            var li = '<li>' + state + '</li>'
+            results[0].append($(li)[0])
+          })
+        }
+
+        function stateMatches(s){
+          var input = s
+          var possibleStates = STATES.filter(function(state){
+            var patt = new RegExp(input)
+            return patt.test(state)
+            }
+          )
+          displayStates(possibleStates)
+        }
+
+        $('#input').keyup(function(e){
+            var inputState = e.target.value;
+            if(inputState !== ""){
+              stateMatches(inputState)
+            } else{
+              $('ul').children().remove()
+            }
+        })
+
+      })
+    </script>
+
+
+    <input id="input" placeholder="search states..." type="text"/>
+  </body>
+
+</html>
