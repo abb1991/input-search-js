@@ -9,6 +9,7 @@
   <body>
     <script>
 
+
       $('document').ready( function(){
 
         function displayStates(states){
@@ -28,7 +29,7 @@
         function stateMatches(s){
           var input = s
           var possibleStates = STATES.filter(function(state){
-            var patt = new RegExp(input)
+            var patt = new RegExp(input, 'ig')
             return patt.test(state)
             }
           )
@@ -44,11 +45,83 @@
             }
         })
 
+        function getFib(num){
+          let prev = 0, cur = 1;
+          for(let i = 0; i < num; i++) {
+            [prev, cur] = [cur, cur + prev]
+            console.log(cur)
+          }
+        }
+
+        function getFibRecur(num) {
+          let prev = 0, cur = 1;
+          if (num === 0) {
+            return prev + cur
+          } else {
+            cur = getFibRecur(num - 1)
+            prev = getFibRecur(num - 2)
+          }
+        }
+
+        $('#fib').submit(function(e){
+          e.preventDefault();
+          let numOfValues = parseInt($('#fibNum')[0].value)
+          getFib(numOfValues)
+        })
+
+
+        //curried function
+
+        let multiplier = function(x){
+          return function(y){
+            return x * y
+          }
+        }
+
+        let multiplyByTwo = multiplier(2)
+        console.log(multiplyByTwo)
+        let product = multiplyByTwo(3)
+        console.log(product)
+        let anotherProduct = multiplier(2)(4)
+        console.log(anotherProduct)
+
+        (function(){
+          var args;
+          Function.prototype.curry = function () {
+            console.log(this);
+            var fn = this;
+            if (args){
+              args = Array.prototype.slice.call(arguments).concat(args)
+            } else {
+              args = Array.prototype.slice.call(arguments);
+            }
+
+            if (args.length === 4) {
+              console.log(fn)
+              return (function() {
+                console.log(fn)
+                console.log('args in return func', args)
+                return fn.apply(this, args.concat(
+                  Array.prototype.slice.call(args)));
+              })();
+            } else {
+                console.log('fn in else', fn);
+                console.log('fn.curry', fn.curry);
+                return fn.curry.bind(fn);
+            }
+          }
+        })();
+
       })
     </script>
 
 
     <input id="input" placeholder="search states..." type="text"/>
+
+    <form id="fib">
+      <input id="fibNum"  placeholder="get fibonacci sequence" type="text" />
+      <input type="submit" value="submit" />
+    </form>
   </body>
 
 </html>
